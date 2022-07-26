@@ -1,9 +1,9 @@
-APPNAME=lispy-test
-SOURCEDIR=src
+APPNAME=lispy
+SOURCEDIR=. ../src
 LDFLAGS=
 LDLIBS=
-SOURCES=$(shell find $(SOURCEDIR) -name "*.c" | sed "s|^\./||")
-CFLAGS+=-MMD -std=c89
+SOURCES=$(filter-out ../src/main.c, $(shell find $(SOURCEDIR) -name "*.c" | sed "s|^\./||"))
+CFLAGS+=-MMD -std=c89 -I../picotest/ -I../src/
 OUT=$(addprefix $(OUTDIR)/,$(APPNAME))
 OBJECTS=$(addprefix $(OBJDIR)/,$(SOURCES:%=%.o))
 
@@ -37,9 +37,6 @@ clean:
 run: $(OUT)
 	@./$(OUT)
 
-test:
-	$(MAKE) -C test
-
-.PHONY: all clean run test
+.PHONY: all clean run
 
 -include $(OBJECTS:%.o=%.d)
